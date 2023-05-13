@@ -20,5 +20,7 @@ export const getPoliciesByAgent = async (id) => {
     return rows
 }
 
-const test = await getPoliciesByAgent(6)
-console.log(test)
+export const getAgents = async (id) => {
+    const [rows] = await pool.query(`select * from agent`)
+    return rows
+}

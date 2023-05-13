@@ -1,15 +1,24 @@
 import express from "express";
+import cors from 'cors'
 
-import { getPoliciesByAgent } from "./database.js";
+import { getPoliciesByAgent, getAgents } from "./database.js";
 
 const app = express();
+app.use(cors({
+    origin: '*'
+}));
+app.use(express.json());
 
 
-
-app.get('/policies/agent_id/:id', async (req, res) =>{
+app.get('/policies/agent_id/:id', async (req, res) => {
     const id = req.params.id;
     const policies = await getPoliciesByAgent(id)
     res.send(policies)
+})
+
+app.get('/agents', async (req, res) => {
+    const agents = await getAgents()
+    res.send(agents)
 })
 
 
