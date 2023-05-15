@@ -65,3 +65,14 @@ export const getAgents = async (id) => {
     const [rows] = await pool.query(`select * from agent`)
     return rows
 }
+
+export const getPolicyByPolicyNumber = async (policyNumber) => {
+    const [rows] = await pool.query(`select * from policy 
+    left join agent on policy.agent_id = agent.id 
+    left join assured on policy.assured_id = assured.id
+    where policy_number = ?`, [policyNumber])
+    return rows
+}
+
+const test = await getPolicyByPolicyNumber('MC-PVSPL-MK-23-0005165-02')
+console.log(test)
