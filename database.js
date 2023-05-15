@@ -23,6 +23,8 @@ export const getPoliciesByAgent = async (id) => {
 
 export const getPoliciesByPolicyNumber = async (policyNumber) => {
     const [rows] = await pool.query(`select * from policy 
+    left join agent on policy.agent_id = agent.id 
+    left join assured on policy.assured_id = assured.id
     where policy_number like ?`, ['%' + policyNumber + '%'])
     return rows
 }
