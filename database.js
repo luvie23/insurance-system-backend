@@ -32,5 +32,3 @@ export const getAgents = async (id) => {
     return rows
 }
 
-const test = await getPoliciesByPolicyNumber('mk')
-console.log(test)
