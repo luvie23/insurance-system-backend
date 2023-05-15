@@ -1,7 +1,7 @@
 import express from "express";
 import cors from 'cors'
 
-import { getPoliciesByAgent, getAgents, getPoliciesByPolicyNumber } from "./database.js";
+import { getPoliciesByAgent, getAgents, getPoliciesByPolicyNumber, getPoliciesByChassisNumber, getPoliciesByEngineNumber, getPoliciesByPlateNumber } from "./database.js";
 
 const app = express();
 app.use(cors({
@@ -24,6 +24,24 @@ app.get('/agents', async (req, res) => {
 app.get('/policies/policy_number=:policyNumber', async (req, res) => {
     const policyNumber = req.params.policyNumber;
     const policies = await getPoliciesByPolicyNumber(policyNumber)
+    res.send(policies)
+})
+
+app.get('/policies/chassis_number=:chassisNumber', async (req, res) => {
+    const chassisNumber = req.params.chassisNumber;
+    const policies = await getPoliciesByChassisNumber(chassisNumber)
+    res.send(policies)
+})
+
+app.get('/policies/engine_number=:engineNumber', async (req, res) => {
+    const engineNumber = req.params.engineNumber;
+    const policies = await getPoliciesByEngineNumber(engineNumber)
+    res.send(policies)
+})
+
+app.get('/policies/plate_number=:plateNumber', async (req, res) => {
+    const plateNumber = req.params.plateNumber;
+    const policies = await getPoliciesByPlateNumber(plateNumber)
     res.send(policies)
 })
 

@@ -29,6 +29,30 @@ export const getPoliciesByPolicyNumber = async (policyNumber) => {
     return rows
 }
 
+export const getPoliciesByEngineNumber = async (engineNumber) => {
+    const [rows] = await pool.query(`select * from policy 
+    left join agent on policy.agent_id = agent.id 
+    left join assured on policy.assured_id = assured.id
+    where engine_number like ?`, ['%' + engineNumber + '%'])
+    return rows
+}
+
+export const getPoliciesByChassisNumber = async (chassisNumber) => {
+    const [rows] = await pool.query(`select * from policy 
+    left join agent on policy.agent_id = agent.id 
+    left join assured on policy.assured_id = assured.id
+    where chassis_number like ?`, ['%' + chassisNumber + '%'])
+    return rows
+}
+
+export const getPoliciesByPlateNumber = async (plateNumber) => {
+    const [rows] = await pool.query(`select * from policy 
+    left join agent on policy.agent_id = agent.id 
+    left join assured on policy.assured_id = assured.id
+    where plate_number like ?`, ['%' + plateNumber + '%'])
+    return rows
+}
+
 export const getAgents = async (id) => {
     const [rows] = await pool.query(`select * from agent`)
     return rows
