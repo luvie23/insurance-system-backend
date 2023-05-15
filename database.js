@@ -53,8 +53,15 @@ export const getPoliciesByPlateNumber = async (plateNumber) => {
     return rows
 }
 
+export const getPoliciesByAssuredName = async (assuredName) => {
+    const [rows] = await pool.query(`select * from policy 
+    left join agent on policy.agent_id = agent.id 
+    left join assured on policy.assured_id = assured.id
+    where assured.first_name like ? or assured.last_name like?`, ['%' + assuredName + '%', '%' + assuredName + '%'])
+    return rows
+}
+
 export const getAgents = async (id) => {
     const [rows] = await pool.query(`select * from agent`)
     return rows
 }
-

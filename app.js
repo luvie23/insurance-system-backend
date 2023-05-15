@@ -1,7 +1,13 @@
 import express from "express";
 import cors from 'cors'
 
-import { getPoliciesByAgent, getAgents, getPoliciesByPolicyNumber, getPoliciesByChassisNumber, getPoliciesByEngineNumber, getPoliciesByPlateNumber } from "./database.js";
+import { getPoliciesByAgent, 
+    getAgents, 
+    getPoliciesByPolicyNumber, 
+    getPoliciesByChassisNumber, 
+    getPoliciesByEngineNumber, 
+    getPoliciesByPlateNumber, 
+    getPoliciesByAssuredName } from "./database.js";
 
 const app = express();
 app.use(cors({
@@ -42,6 +48,12 @@ app.get('/policies/engine_number=:engineNumber', async (req, res) => {
 app.get('/policies/plate_number=:plateNumber', async (req, res) => {
     const plateNumber = req.params.plateNumber;
     const policies = await getPoliciesByPlateNumber(plateNumber)
+    res.send(policies)
+})
+
+app.get('/policies/assured_name=:assuredName', async (req, res) => {
+    const assuredName = req.params.plateNumber;
+    const policies = await getPoliciesByAssuredName(assuredName)
     res.send(policies)
 })
 
