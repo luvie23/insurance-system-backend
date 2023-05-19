@@ -9,6 +9,7 @@ import { getAgents,
     getPoliciesByPlateNumber, 
     getPoliciesByAssuredName, 
     getPolicyByPolicyNumber,
+    createPolicy,
     } from "./database.js";
 
 const app = express();
@@ -63,6 +64,11 @@ app.get('/policy/:policyNumber', async (req, res) => {
     const policyNumber = req.params.policyNumber;
     const policies = await getPolicyByPolicyNumber(policyNumber)
     res.send(policies)
+})
+
+app.post('/create_policy', async (req, res) => {
+    const test = await createPolicy(req.body)
+    res.send(test)
 })
 
 

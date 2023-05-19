@@ -67,12 +67,63 @@ export const getAgents = async (id) => {
 }
 
 export const getPolicyByPolicyNumber = async (policyNumber) => {
-    const [rows] = await pool.query(`select * from policy 
+    const [rows] = await pool.query(`select *, concat(agent.first_name, ' ', agent.last_name) as agent_name from policy 
     left join agent on policy.agent_id = agent.id 
     left join assured on policy.assured_id = assured.id
     where policy_number = ?`, [policyNumber])
     return rows
 }
 
-const test = await getPolicyByPolicyNumber('MC-PVSPL-MK-23-0005165-02')
-console.log(test)
+const createAssured = async (first_name, last_name, address, contact_number, dateTime) => {
+    const [assuredResult] = await pool.query(`
+    insert into assured (first_name, last_name, address, contact_number, created_at, updated_at)
+    values (?, ?, ?, ?, ?, ?)
+    `, [first_name, last_name, address, contact_number, dateTime, dateTime])
+    return assuredResult.insertId
+
+}
+
+export const createPolicy = async (request) => {
+    const today = new Date();
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date+' '+time;
+    
+    const assuredId = await createAssured(request.first_name, request.last_name, request.address, request.contact_number, dateTime)
+    console.log(assuredId)
+    const [policy] = await pool.query(`
+    insert into policy (agent_id, assured_id, policy_number, bill_number, plate_number, engine_number, chassis_number, issue_date, inception_date, expiry_date, own_damage, acts_of_nature, bi_pd, auto_passenger, acts_of_nature_premium, own_damage_premium, auto_passenger_premium, bi_premium, pd_premium, gross_premium, taxes, total_premium, paid_premium, balance, created_at, updated_at)
+    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+    `, [request.agent_id, assuredId, request.policy_number, request.bill_number, request.plate_number, request.engine_number, request.chassis_number, request.issue_date, request.inception_date, request.expiry_date, request.own_damage, request.acts_of_nature, request.bi_pd, request.auto_passenger, request.acts_of_nature_premium, request.own_damage_premium, request.auto_passenger_premium, request.bi_premium, request.pd_premium, request.gross_premium, request.taxes, request.total_premium, request.paid_premium, request.balance, dateTime, dateTime])
+
+    return policy.insertId
+}
+
+
+    // firstName, 
+    // lastName, 
+    // address, 
+    // contactNumber,
+    // agentId, 
+    // policyNumber, 
+    // billNumber, 
+    // plateNumber, 
+    // engineNumber, 
+    // chassisNumber, 
+    // issueDate, 
+    // inceptionDate, 
+    // expiryDate, 
+    // ownDamage, 
+    // actsOfNature, 
+    // bipd, 
+    // autoPassenger, 
+    // actsOfNaturePremium, 
+    // ownDamagePremium, 
+    // autoPassengerPremium, 
+    // biPremium, 
+    // pdPremium, 
+    // grossPremium, 
+    // taxes, 
+    // totalPremium, 
+    // paidPremium, 
+    // balance
