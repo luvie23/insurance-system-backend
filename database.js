@@ -74,6 +74,14 @@ export const getPolicyByPolicyNumber = async (policyNumber) => {
     return rows
 }
 
+export const getNotesByPolicyNumber = async (policyNumber) => {
+    const [rows] = await pool.query(`select content, title, notes.created_at from notes
+    left join policy on notes.policy_id = policy.id
+    where policy_number = ?
+    order by notes.created_at desc`, [policyNumber])
+    return rows
+}
+
 const createAssured = async (first_name, last_name, address, contact_number, dateTime) => {
     const [assuredResult] = await pool.query(`
     insert into assured (first_name, last_name, address, contact_number, created_at, updated_at)

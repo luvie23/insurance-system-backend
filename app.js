@@ -10,6 +10,7 @@ import { getAgents,
     getPoliciesByAssuredName, 
     getPolicyByPolicyNumber,
     createPolicy,
+    getNotesByPolicyNumber,
     } from "./database.js";
 
 const app = express();
@@ -62,8 +63,14 @@ app.get('/policies/assured_name=:assuredName', async (req, res) => {
 
 app.get('/policy/:policyNumber', async (req, res) => {
     const policyNumber = req.params.policyNumber;
-    const policies = await getPolicyByPolicyNumber(policyNumber)
-    res.send(policies)
+    const policies = await getPolicyByPolicyNumber(policyNumber);
+    res.send(policies);
+})
+
+app.get('/notes/:policyNumber', async (req, res) => {
+    const policyNumber = req.params.policyNumber;
+    const notes = await getNotesByPolicyNumber(policyNumber);
+    res.send(notes)
 })
 
 app.post('/create_policy', async (req, res) => {
