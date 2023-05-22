@@ -74,8 +74,18 @@ app.get('/notes/:policyNumber', async (req, res) => {
 })
 
 app.post('/create_policy', async (req, res) => {
-    const test = await createPolicy(req.body)
-    res.send(test)
+    if (req.body.policy_number == ''){
+        res.status(400).send({error: 'Please enter a policy number'})
+    }
+
+    const existingPolicy = await getPoliciesByPolicyNumber(req.body.policy_number)
+    if (existingPolicy.length > 0){
+        res.status(400).send({error: 'Policy Number already exists!'})
+    } else{
+        const newPolicy = await createPolicy(req.body)
+        res.send(newPolicy)
+    }
+
 })
 
 
